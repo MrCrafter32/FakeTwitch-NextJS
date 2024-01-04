@@ -9,13 +9,14 @@ const receiver = new WebhookReceiver(
   process.env.LIVEKIT_SECRET!
 );
 
-export async function POST(req: Request) {
+export async function POST(req: Request, res: Response) {
   const body = await req.text();
   const headerPayload = headers();
   const authorization = headerPayload.get("Authorization");
 
   if (!authorization) {
-    return new Response("No authorization header", { status: 400 });
+    
+    return new Response(`No authorization header ${req}`, { status: 400 },);
   }
 
   const event = receiver.receive(body, authorization);
