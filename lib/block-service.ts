@@ -127,3 +127,18 @@ export const getBlockedUsers = async () => {
 
   return blockedUsers;
 };
+
+export const getBlockedByUsers = async () => {
+  const self = await getSelf();
+
+  const blockedByUsers = await db.block.findMany({
+    where: {
+      blockedId: self.id,
+    },
+    include: {
+      blocked: true,
+    },
+  });
+
+  return blockedByUsers;
+}
