@@ -12,6 +12,14 @@ const nextConfig = {
       });
       return config;
     },
+    images: {
+      domains: [
+        "utfs.io",
+      ],
+    },
   };
   
+  
+  
   module.exports = nextConfig;
+
