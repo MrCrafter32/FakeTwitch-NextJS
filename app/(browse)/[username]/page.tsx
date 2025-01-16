@@ -27,8 +27,11 @@ const UserPage = async ({
   const blockedUsers = await getBlockedByUsers();
   const blockedUsernames = blockedUsers.map((user) => user.blocked.username);
   const self = await getSelf();
-  if (blockedUsernames.includes(self.username)) {
-    notFound();
+
+  if(self){
+    if (blockedUsernames.includes(self.username)) {
+      notFound();
+    }
   }
 
 
