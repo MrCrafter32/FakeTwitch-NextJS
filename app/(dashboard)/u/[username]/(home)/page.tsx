@@ -1,5 +1,5 @@
 
-import { currentUser } from "@clerk/nextjs";
+import { currentUser } from "@clerk/nextjs/server";
 import { isBlockedByUser } from "@/lib/block-service";
 import { getUserbyUsername } from "@/lib/user-service";
 import { StreamPlayer } from "@/components/stream-player";
@@ -32,7 +32,6 @@ const CreatorPage = async ({
 
   return ( 
     <div className="h-full">
-      <p>{self.username}</p>
       <StreamPlayer
         user={user}
         stream={user.stream}
