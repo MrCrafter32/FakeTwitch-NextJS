@@ -3,13 +3,13 @@ import { Clapperboard, LogOut } from "lucide-react";
 import { 
   SignInButton, 
   UserButton, 
-  currentUser
+  useUser
 } from "@clerk/nextjs";
 
 import { Button } from "@/components/ui/button";
 
 export const Actions = async () => {
-  const user = await currentUser();
+  const user = await useUser();
 
   return (
     <div className="flex items-center justify-end gap-x-2"> 

@@ -3,8 +3,8 @@ import { Clapperboard } from "lucide-react";
 import { 
   SignInButton, 
   UserButton, 
-  currentUser
 } from "@clerk/nextjs";
+import { currentUser } from "@clerk/nextjs/server";
 
 import { Button } from "@/components/ui/button";
 
@@ -28,7 +28,7 @@ export const Actions = async () => {
             className="text-muted-foreground hover:text-primary"
             asChild
           >
-            <Link href={`/u/${user.username}`}>
+            <Link href={user ? `/u/${user.username}` : "#"}>
               <Clapperboard className="h-5 w-5 lg:mr-2" />
               <span className="hidden lg:block">
                 Dashboard
