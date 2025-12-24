@@ -8,15 +8,14 @@ import { getUserById } from "@/lib/user-service";
 import { isBlockedByUser } from "@/lib/block-service";
 
 export const createViewerToken = async (hostIdentity: string) => {
-  let self;
+  const authedSelf = await getSelf();
 
-  try {
-    self = await getSelf();
-  } catch {
-    const id = v4();
-    const username = `guest#${Math.floor(Math.random() * 1000)}`;
-    self = { id, username };
-  }
+  const self =
+    authedSelf ??
+    ({
+      id: v4(),
+      username: `guest#${Math.floor(Math.random() * 1000)}`,
+    } as const);
 
   const host = await getUserById(hostIdentity);
 
@@ -28,10 +27,6 @@ export const createViewerToken = async (hostIdentity: string) => {
 
   if (isBlocked) {
     throw new Error("User is blocked");
-  }
-
-  if (!self) {
-    throw new Error("Unauthorized");
   }
 
   const isHost = self.id === host.id;
