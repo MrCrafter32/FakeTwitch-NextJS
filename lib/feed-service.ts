@@ -28,7 +28,13 @@ export const getStreams = async () => {
       },
       select: {
         id: true,
-        user: true,
+        user: {
+          select: {
+            id: true,
+            username: true,
+            imageUrl: true,
+          },
+        },
         isLive: true,
         name: true,
         thumbnailUrl: true,
@@ -46,7 +52,13 @@ export const getStreams = async () => {
     streams = await db.stream.findMany({
       select: {
         id: true,
-        user: true,
+        user: {
+          select: {
+            id: true,
+            username: true,
+            imageUrl: true,
+          },
+        },
         isLive: true,
         name: true,
         thumbnailUrl: true,

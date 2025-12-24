@@ -1,52 +1,53 @@
-import { headers } from 'next/headers'
-import { WebhookEvent } from '@clerk/nextjs/server'
-import { db } from '@/lib/db'
+import { headers } from "next/headers";
+import { Webhook } from "svix";
+
+import { db } from "@/lib/db";
 
 export async function POST(req: Request) {
-  const WEBHOOK_SECRET = process.env.CLERK_WEBHOOK_SECRET
+  const WEBHOOK_SECRET = process.env.CLERK_WEBHOOK_SECRET;
 
   if (!WEBHOOK_SECRET) {
-    throw new Error('Please add WEBHOOK_SECRET from Clerk Dashboard to .env or .env.local')
+    return new Response("Missing CLERK_WEBHOOK_SECRET", { status: 500 });
   }
 
-  // Get the headers
   const headerPayload = headers();
-  const svix_id = headerPayload.get("svix-id");
-  const svix_timestamp = headerPayload.get("svix-timestamp");
-  const svix_signature = headerPayload.get("svix-signature");
+  const svixId = headerPayload.get("svix-id");
+  const svixTimestamp = headerPayload.get("svix-timestamp");
+  const svixSignature = headerPayload.get("svix-signature");
 
-  // If there are no headers, error out
-  if (!svix_id || !svix_timestamp || !svix_signature) {
-    return new Response('Error occurred -- no svix headers', {
-      status: 400
-    });
+  if (!svixId || !svixTimestamp || !svixSignature) {
+    return new Response("Missing Svix headers", { status: 400 });
   }
 
-  // Get the body
-  let payload;
+  const rawBody = await req.text();
+
+  let event: any;
   try {
-    payload = await req.json();
+    const webhook = new Webhook(WEBHOOK_SECRET);
+    event = webhook.verify(rawBody, {
+      "svix-id": svixId,
+      "svix-timestamp": svixTimestamp,
+      "svix-signature": svixSignature,
+    });
   } catch (err) {
-    console.error('Failed to parse JSON body:', err);
-    return new Response('Invalid JSON body', { status: 400 });
+    console.error("Invalid webhook signature:", err);
+    return new Response("Invalid signature", { status: 401 });
   }
-  const body = JSON.stringify(payload);
 
-  // Get the ID and type
-  const { id } = payload.data;
-  const eventType = payload.type;
+  const eventType = event?.type;
+  const data = event?.data;
 
   try {
     if (eventType === 'user.created') {
       try {
         await db.user.create({
           data: {
-            externalUserId: payload.data.id,
-            username: payload.data.username,
-            imageUrl: payload.data.image_url,
+            externalUserId: data.id,
+            username: data.username,
+            imageUrl: data.image_url,
             stream: {
               create: {
-                name: `${payload.data.username}'s stream`,
+                name: `${data.username}'s stream`,
               }
             }
           }
@@ -60,7 +61,7 @@ export async function POST(req: Request) {
       try {
         currentUser = await db.user.findUnique({
           where: {
-            externalUserId: payload.data.id
+            externalUserId: data.id
           }
         });
       } catch (err) {
@@ -78,8 +79,8 @@ export async function POST(req: Request) {
             id: currentUser.id
           },
           data: {
-            username: payload.data.username,
-            imageUrl: payload.data.image_url,
+            username: data.username,
+            imageUrl: data.image_url,
           }
         });
       } catch (err) {
@@ -90,7 +91,7 @@ export async function POST(req: Request) {
       try {
         await db.user.delete({
           where: {
-            externalUserId: payload.data.id
+            externalUserId: data.id
           }
         });
       } catch (err) {

@@ -96,7 +96,7 @@ export const InfoModal = ({
               Thumbnail
             </Label>
             {thumbnailUrl ? (
-              <div className="relative aspect-video rounded-xl overflow-hidden border border-white/10">
+              <div className="relative aspect-video rounded-xl overflow-hidden border border-border">
                 <div className="absolute top-2 right-2 z-[10]">
                   <Hint label="Remove thumbnail" asChild side="left">
                     <Button
@@ -122,10 +122,10 @@ export const InfoModal = ({
                   endpoint="thumbnailUploader"
                   appearance={{
                     label: {
-                      color: "#FFFFFF"
+                      color: "hsl(var(--foreground))"
                     },
                     allowedContent: {
-                      color: "#FFFFFF"
+                      color: "hsl(var(--muted-foreground))"
                     }
                   }}
                   onClientUploadComplete={(res) => {

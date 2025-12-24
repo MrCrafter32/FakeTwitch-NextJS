@@ -44,6 +44,10 @@ export const StreamPlayer = ({
   stream,
   isFollowing
 }: StreamPlayerProps) => {
+  const serverUrl =
+    process.env.NEXT_PUBLIC_LIVEKIT_WS_URL ??
+    process.env.NEXT_PUBLIC_LIVEKIT_URL;
+
   const {
     token,
     name,
@@ -55,6 +59,17 @@ export const StreamPlayer = ({
     return <StreamPlayerSkeleton />
   }
 
+  if (!serverUrl) {
+    return (
+      <div className="h-full flex items-center justify-center p-6">
+        <p className="text-sm text-muted-foreground">
+          LiveKit URL is not configured. Set <span className="font-medium">NEXT_PUBLIC_LIVEKIT_URL</span> (or
+          <span className="font-medium"> NEXT_PUBLIC_LIVEKIT_WS_URL</span>).
+        </p>
+      </div>
+    );
+  }
+
   return (
     <>
       {collapsed && (
@@ -64,7 +79,7 @@ export const StreamPlayer = ({
       )}
       <LiveKitRoom
         token={token}
-        serverUrl={process.env.NEXT_PUBLIC_LIVEKIT_WS_URL}
+        serverUrl={serverUrl}
         className={cn(
           "grid grid-cols-1 lg:gap-y-0 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-6 h-full",
           collapsed && "lg:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-2"

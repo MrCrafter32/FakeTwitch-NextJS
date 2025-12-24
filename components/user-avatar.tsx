@@ -58,5 +58,5 @@ export const UserAvatar = ({
 interface UserAvatarSkeletonProps extends VariantProps<typeof avatarSizes> {}
 
 export const UserAvatarSkeleton = ({ size }: UserAvatarSkeletonProps) => {
-  return <Skeleton className={cn("rounded-full bg-[#252731] ", avatarSizes({ size }))} />;
+  return <Skeleton className={cn("rounded-full bg-muted", avatarSizes({ size }))} />;
 };

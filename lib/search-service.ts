@@ -1,7 +1,25 @@
 import { db } from "@/lib/db";
 import { getSelf } from "@/lib/auth-service";
 
+export type SearchResult = {
+  id: string;
+  name: string;
+  thumbnailUrl: string | null;
+  isLive: boolean;
+  updatedAt: Date;
+  user: {
+    id: string;
+    username: string;
+    imageUrl: string;
+  };
+};
+
 export const getSearch = async (term?: string) => {
+  const normalizedTerm = term?.trim();
+  if (!normalizedTerm) {
+    return [];
+  }
+
   let userId;
 
   try {
@@ -11,7 +29,7 @@ export const getSearch = async (term?: string) => {
     userId = null;
   }
 
-  let streams = [];
+  let streams: SearchResult[] = [];
 
   if (userId) {
     streams = await db.stream.findMany({
@@ -28,20 +46,26 @@ export const getSearch = async (term?: string) => {
         OR: [
           {
             name: {
-              contains: term,
+              contains: normalizedTerm,
             },
           },
           {
             user: {
               username: {
-                contains: term,
+                contains: normalizedTerm,
               },
             }
           },
         ],
       },
       select: {
-        user: true,
+        user: {
+          select: {
+            id: true,
+            username: true,
+            imageUrl: true,
+          },
+        },
         id: true,
         name: true,
         isLive: true,
@@ -63,20 +87,26 @@ export const getSearch = async (term?: string) => {
         OR: [
           {
             name: {
-              contains: term,
+              contains: normalizedTerm,
             },
           },
           {
             user: {
               username: {
-                contains: term,
+                contains: normalizedTerm,
               },
             }
           },
         ],
       },
       select: {
-        user: true,
+        user: {
+          select: {
+            id: true,
+            username: true,
+            imageUrl: true,
+          },
+        },
         id: true,
         name: true,
         isLive: true,

@@ -29,8 +29,8 @@ export const InfoCard = ({
     <div className="px-4">
       <div className="rounded-xl bg-background">
         <div className="flex items-center gap-x-2.5 p-4">
-          <div className="rounded-md bg-blue-600 p-2 h-auto w-auto">
-            <Pencil className="h-5 w-5" />
+          <div className="rounded-md bg-primary p-2 h-auto w-auto">
+            <Pencil className="h-5 w-5 text-primary-foreground" />
           </div>
           <div>
             <h2 className="text-sm lg:text-lg font-semibold capitalize">
@@ -60,7 +60,7 @@ export const InfoCard = ({
               Thumbnail
             </h3>
             {thumbnailUrl && (
-              <div className="relative aspect-video rounded-md overflow-hidden w-[200px] border border-white/10">
+              <div className="relative aspect-video rounded-md overflow-hidden w-[200px] border border-border">
                 <Image
                   fill
                   src={thumbnailUrl}

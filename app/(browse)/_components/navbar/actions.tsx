@@ -7,12 +7,14 @@ import {
 import { currentUser } from "@clerk/nextjs/server";
 
 import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 export const Actions = async () => {
   const user = await currentUser();
 
   return (
     <div className="flex items-center justify-end gap-x-2 ml-4 lg:ml-0">
+      <ThemeToggle />
       {!user && (
         <SignInButton>
           <Button size="sm" variant="primary">

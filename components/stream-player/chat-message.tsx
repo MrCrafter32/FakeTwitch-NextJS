@@ -15,8 +15,8 @@ export const ChatMessage = ({
   const color = stringToColor(data.from?.name || "");
 
   return (
-    <div className="flex gap-2 p-2 rounded-md hover:bg-white/5">
-      <p className="text-sm text-white/40">
+    <div className="flex gap-2 p-2 rounded-md hover:bg-accent/30">
+      <p className="text-sm text-muted-foreground">
         {format(data.timestamp, "HH:MM")}
       </p>
       <div className="flex flex-wrap items-baseline gap-1 grow">

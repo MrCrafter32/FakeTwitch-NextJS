@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { User } from "@prisma/client";
 import { formatDistanceToNow } from "date-fns";
 
 import { Thumbnail, ThumbnailSkeleton } from "@/components/thumbnail";
@@ -13,7 +12,11 @@ interface ResultCardProps {
     thumbnailUrl: string | null;
     isLive: boolean;
     updatedAt: Date;
-    user: User;
+    user: {
+      id: string;
+      username: string;
+      imageUrl: string;
+    };
   };
 };
 
@@ -21,7 +24,11 @@ export const ResultCard = ({
   data,
 }: ResultCardProps) => {
   return (
-    <Link href={`/${data.user.username}`}>
+    <Link
+      href={`/${data.user.username}`}
+      className="block rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+      aria-label={`View ${data.user.username}`}
+    >
       <div className="w-full flex gap-x-4">
         <div className="relative h-[9rem] w-[16rem]">
           <Thumbnail
@@ -33,7 +40,7 @@ export const ResultCard = ({
         </div>
         <div className="space-y-1">
           <div className="flex items-center gap-x-2">
-            <p className="font-bold text-lg cursor-pointer hover:text-blue-500">
+            <p className="font-bold text-lg hover:text-primary">
               {data.user.username}
             </p>
             <VerifiedMark />

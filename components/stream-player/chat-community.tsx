@@ -59,7 +59,7 @@ export const ChatCommunity = ({
       <Input
         onChange={(e) => onChange(e.target.value)}
         placeholder="Search community"
-        className="border-white/10"
+        className="border-input"
       />
       <ScrollArea className="gap-y-2 mt-4">
         <p className="text-center text-sm text-muted-foreground hidden last:block p-2">

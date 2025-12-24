@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { Stream, User } from "@prisma/client";
 
 import { Thumbnail, ThumbnailSkeleton } from "@/components/thumbnail";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -8,7 +7,11 @@ import { UserAvatar, UserAvatarSkeleton } from "@/components/user-avatar";
 
 interface ResultCardProps {
   data: {
-    user: User,
+    user: {
+      id: string;
+      username: string;
+      imageUrl: string;
+    },
     isLive: boolean;
     name: string;
     thumbnailUrl: string | null;
@@ -19,7 +22,11 @@ export const ResultCard = ({
   data,
 }: ResultCardProps) => {
   return (
-    <Link href={`/${data.user.username}`}>
+    <Link
+      href={`/${data.user.username}`}
+      className="block rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+      aria-label={`Watch ${data.user.username}`}
+    >
       <div className="h-full w-full space-y-4">
         <Thumbnail
           src={data.thumbnailUrl}
@@ -34,7 +41,7 @@ export const ResultCard = ({
             isLive={data.isLive}
           />
           <div className="flex flex-col text-sm overflow-hidden">
-            <p className="truncate font-semibold hover:text-blue-500">
+            <p className="truncate font-semibold hover:text-primary">
               {data.name}
             </p>
             <p className="text-muted-foreground">

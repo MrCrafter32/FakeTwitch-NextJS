@@ -37,7 +37,7 @@ export const UserItem = (
         className={cn(
             "w-full h-12",
             collapsed ? "justify-center" : "justify-start",
-            isActive && "bg-primary-foreground"
+            isActive && "bg-accent text-accent-foreground"
         )}
         >
             <Link href={href}>
@@ -65,9 +65,9 @@ export const UserItem = (
 
     export const UserItemSkeleton = () => {
         return(
-            <li className="flex items-center gap-x-4 px-3 py-2 bg-[#252731] ">
-                <Skeleton className="min-h-[32px] min-w-[32px] rounded-full bg-[#252731]"/>
-                <div className="flex-1 bg-[#252731]">
+            <li className="flex items-center gap-x-4 px-3 py-2 bg-background">
+                <Skeleton className="min-h-[32px] min-w-[32px] rounded-full bg-muted"/>
+                <div className="flex-1">
                     <Skeleton className="h-6" />
                 </div>
             </li>

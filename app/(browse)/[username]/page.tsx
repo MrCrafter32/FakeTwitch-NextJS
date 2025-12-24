@@ -1,10 +1,11 @@
 import { notFound } from "next/navigation";
+import { currentUser } from "@clerk/nextjs/server";
 
 import { getUserbyUsername } from "@/lib/user-service";
 import { isfollowingUser } from "@/lib/follow-service";
-import { getBlockedByUsers, isBlockedByUser } from "@/lib/block-service";
+import { isBlockedByUser } from "@/lib/block-service";
 import { StreamPlayer } from "@/components/stream-player";
-import { getSelf } from "@/lib/auth-service";
+import { db } from "@/lib/db";
 
 
 interface UserPageProps {
@@ -24,13 +25,28 @@ const UserPage = async ({
 
   const isFollowing = await isfollowingUser(user.id);
   const isBlocked = await isBlockedByUser(user.id);
-  const blockedUsers = await getBlockedByUsers();
-  const blockedUsernames = blockedUsers.map((user) => user.blocked.username);
-  const self = await getSelf();
+  const clerkViewer = await currentUser();
 
-  if(self){
-    if (blockedUsernames.includes(self.username)) {
-      notFound();
+  if (clerkViewer?.id) {
+    const self = await db.user.findUnique({
+      where: { externalUserId: clerkViewer.id },
+      select: { id: true },
+    });
+
+    if (self?.id) {
+      const hostBlockedViewer = await db.block.findUnique({
+        where: {
+          blockerId_blockedId: {
+            blockerId: user.id,
+            blockedId: self.id,
+          },
+        },
+        select: { id: true },
+      });
+
+      if (hostBlockedViewer) {
+        notFound();
+      }
     }
   }
 

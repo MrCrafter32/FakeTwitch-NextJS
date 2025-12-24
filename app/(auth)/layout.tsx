@@ -7,7 +7,7 @@ const AuthLayout = ( {
     children: React.ReactNode;
 }) => {
     return (
-        <div className="h-screen flex flex-col items-center justify-center bg-[#09090b] ">
+        <div className="h-screen flex flex-col items-center justify-center bg-background ">
         <Image
             src="/logo.svg"
             alt="Logo"
@@ -15,7 +15,7 @@ const AuthLayout = ( {
             height={150}
         />
         <p>
-            <span className="text-[#f9f9fa]">Welcome to Faketwitch</span>
+            <span className="text-foreground">Welcome to Faketwitch</span>
         </p>
         {children}
         </div>

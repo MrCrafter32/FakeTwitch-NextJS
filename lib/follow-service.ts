@@ -5,7 +5,7 @@ export const getFollowedUsers = async () => {
   try {
     const self = await getSelf();
 
-    const followedUsers = db.follow.findMany({
+    const followedUsers = await db.follow.findMany({
       where: {
         followerId: self.id,
         following: {
