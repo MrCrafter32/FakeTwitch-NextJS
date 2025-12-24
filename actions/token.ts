@@ -30,6 +30,10 @@ export const createViewerToken = async (hostIdentity: string) => {
     throw new Error("User is blocked");
   }
 
+  if (!self) {
+    throw new Error("Unauthorized");
+  }
+
   const isHost = self.id === host.id;
 
   const token = new AccessToken(

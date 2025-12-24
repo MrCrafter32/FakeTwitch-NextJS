@@ -14,13 +14,16 @@ export const ourFileRouter = {
   })
     .middleware(async () => {
       const self = await getSelf();
+      if (!self) {
+        throw new Error("Unauthorized");
+      }
 
-      return { user: self }
+      return { userId: self.id };
     })
     .onUploadComplete(async ({ metadata, file }) => {
       await db.stream.update({
         where: {
-          userID: metadata.user.id,
+          userID: metadata.userId,
         },
         data: {
           thumbnailUrl: file.url,

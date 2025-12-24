@@ -22,12 +22,8 @@ export const getSearch = async (term?: string) => {
 
   let userId;
 
-  try {
-    const self = await getSelf();
-    userId = self.id;
-  } catch {
-    userId = null;
-  }
+  const self = await getSelf();
+  userId = self?.id ?? null;
 
   let streams: SearchResult[] = [];
 

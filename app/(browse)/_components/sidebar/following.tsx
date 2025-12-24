@@ -1,7 +1,7 @@
 "use client";
 
 import { useSidebar } from "@/store/use-sidebar";
-import { Follow , User } from "@prisma/client";
+import type { Follow, User } from "@prisma/client";
 import { UserItem } from "./useritem";
 
 interface FollowingProps {

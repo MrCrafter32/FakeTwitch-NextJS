@@ -1,13 +1,19 @@
 "use server";
 
-import { User } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 
 import { db } from "@/lib/db";
 import { getSelf } from "@/lib/auth-service";
 
-export const updateUser = async (values: Partial<User>) => {
+type UpdateUserInput = {
+  bio?: string | null;
+};
+
+export const updateUser = async (values: UpdateUserInput) => {
   const self = await getSelf();
+  if (!self) {
+    throw new Error("Unauthorized");
+  }
 
   const validData = {
     bio: values.bio,

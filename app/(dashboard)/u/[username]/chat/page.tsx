@@ -5,6 +5,9 @@ import { ToggleCard } from "./_components/toggle-card";
 
 const ChatPage = async () => {
   const self = await getSelf();
+  if (!self) {
+    throw new Error("Unauthorized");
+  }
   const stream = await getStreamByUserId(self.id);
 
   if (!stream) {

@@ -1,6 +1,6 @@
 "use client";
 
-import { Stream, User } from "@prisma/client";
+import type { Stream, User } from "@prisma/client";
 import { LiveKitRoom } from "@livekit/components-react";
 
 import { cn } from "@/lib/utils";
