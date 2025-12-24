@@ -45,6 +45,10 @@ export const resetIngresses = async (hostIdentity: string) => {
 export const createIngress = async (ingressType: IngressInput) => {
   const self = await getSelf();
 
+  if (!self) {
+    throw new Error("Unauthorized");
+  }
+
   await resetIngresses(self.id);
 
   const options: CreateIngressOptions = {
